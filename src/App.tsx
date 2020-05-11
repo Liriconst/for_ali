@@ -1,23 +1,50 @@
 import * as React from 'react';
 import {BrowserRouter as Router, Switch, Route, Link, withRouter} from "react-router-dom";
+
 import styles from './App.module.scss';
 import "./App.scss";
-import { ApolloProvider } from "react-apollo";
+
+import { ApolloProvider, Query } from "react-apollo";
+import { ApolloError } from "apollo-boost";
+import { gql } from 'apollo-boost';
+
 import { createBrowserHistory } from 'history';
 import { client } from "./index";
-import { Input, Button, Select, Menu, Dropdown } from 'antd';
+
+import { Input, Button, Menu, Dropdown } from 'antd';
 import SubMenu from "antd/lib/menu/SubMenu";
 
 import Home from "./components/home/Home";
 import Authorization from "./components/authorization/Authorization";
 import Catalog from "./components/catalog/Catalog";
+import autobind from "autobind-decorator";
 
 const { Search } = Input;
-const { Option } = Select;
 
-function handleChange(value: any) {
-    console.log(`selected ${value}`);
-}
+const GET_CATEGORIES = gql`
+    query {
+        allProdCategories {
+            nodes {
+                id
+                catFullName
+                catFirstName
+                catSecondName
+            }
+        }
+    }
+`;
+
+const GET_SUB = gql`
+    query {
+        allProdSubcategories {
+            nodes {
+                id
+                catId
+                subName
+            }
+        }
+    }
+`;
 
 class AppHeaderInner extends React.Component<{location: any}, {
   visible: boolean
@@ -29,6 +56,12 @@ class AppHeaderInner extends React.Component<{location: any}, {
             visible: false
         };
     }
+
+  @autobind
+  private saveDate(id: number) {
+      localStorage.setItem('subCategoryId', id.toString());
+      window.location.reload();
+  };
 
   public render(): React.ReactNode {
     const {location} = this.props;
@@ -93,80 +126,113 @@ class AppHeaderInner extends React.Component<{location: any}, {
             <span className={styles.appHeaderSeparator}/>
         </div>
         <div className={styles.appFooterBlock}>
-            <div className={styles.appBarFooter}>
+                <div className={styles.appBarFooter}>
+                <Query query={GET_CATEGORIES}>
+                    {({loading, error, data}: {loading: boolean, error?: ApolloError, data: any}) => {
+                        if (loading) return <span>"Загрузка категорий...";</span>
+                        if (error) return <span>`Ошибка! ${error.message}`</span>;
+                        console.log(data);
+                        return (
+                            <div className={styles.appBarFooterInserted}>
+                                {data.allProdCategories.nodes.map((categoryQuery: any) => (
+                                    <div className={styles.appBarFooterDoubleInserted}>
+                                        <span className={styles.appFooterSeparator}/>
+                                        <Menu className={"appFooterMenu"} mode="horizontal">
+                                            <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"}
+                                                 title={<div className="submenu-title-wrapper">
+                                                     <span>{categoryQuery.catFirstName}</span>
+                                                     <span>{categoryQuery.catSecondName}</span>
+                                                 </div>}
+                                            >
+                                                <Menu.ItemGroup className={styles.appFooterMenuGroup}>
+                                                    <Query query={GET_SUB}>
+                                                        {({loading, error, data}: {loading: boolean, error?: ApolloError, data: any}) => {
+                                                            if (loading) return <span>"Загрузка категорий...";</span>
+                                                            if (error) return <span>`Ошибка! ${error.message}`</span>;
+                                                            console.log(data);
+                                                            return (
+                                                                <div style={{display: "flex", flexDirection: "column", borderRadius: "25px"}}>
+                                                                    {data.allProdSubcategories.nodes.map((subQuery: any) => (
+                                                                        <Button onClick={() => this.saveDate(subQuery.id)}><Link to="/catalog">{subQuery.subName}</Link></Button>
+                                                                    ))}
+                                                                </div>
+                                                            );
+                                                        }}
+                                                    </Query>
+                                                </Menu.ItemGroup>
+                                            </SubMenu>
+                                        </Menu>
+                                    </div>
+                                ))}
+                            </div>
+                        );
+                    }}
+                </Query>
                 <span className={styles.appFooterSeparator}/>
-                <Menu className={"appFooterMenu"} mode="horizontal">
-                    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Овощи и</span><span>фрукты</span></div>}>
-                            <Menu.Item key="setting:1">Option 1</Menu.Item>
-                            <Menu.Item key="setting:2">Option 2</Menu.Item>
-                            <Menu.Item key="setting:3">Option 3</Menu.Item>
-                            <Menu.Item key="setting:4">Option 4</Menu.Item>
-                    </SubMenu>
-                </Menu>
-                <span className={styles.appFooterSeparator}/>
-                <Menu className={"appFooterMenu"} mode="horizontal">
-                    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Молоко</span><span>и яйца</span></div>}>
-                        <Menu.Item key="setting:1">Option 1</Menu.Item>
-                        <Menu.Item key="setting:2">Option 2</Menu.Item>
-                        <Menu.Item key="setting:3">Option 3</Menu.Item>
-                        <Menu.Item key="setting:4">Option 4</Menu.Item>
-                    </SubMenu>
-                </Menu>
-                <span className={styles.appFooterSeparator}/>
-                <Menu className={"appFooterMenu"} mode="horizontal">
-                    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Хлеб и</span><span>выпечка</span></div>}>
-                        <Menu.Item key="setting:1">Option 1</Menu.Item>
-                        <Menu.Item key="setting:2">Option 2</Menu.Item>
-                        <Menu.Item key="setting:3">Option 3</Menu.Item>
-                        <Menu.Item key="setting:4">Option 4</Menu.Item>
-                    </SubMenu>
-                </Menu>
-                <span className={styles.appFooterSeparator}/>
-                <Menu className={"appFooterMenu"} mode="horizontal">
-                    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Мясные</span><span>продукты</span></div>}>
-                        <Menu.Item key="setting:1">Option 1</Menu.Item>
-                        <Menu.Item key="setting:2">Option 2</Menu.Item>
-                        <Menu.Item key="setting:3">Option 3</Menu.Item>
-                        <Menu.Item key="setting:4">Option 4</Menu.Item>
-                    </SubMenu>
-                </Menu>
-                <span className={styles.appFooterSeparator}/>
-                <Menu className={"appFooterMenu"} mode="horizontal">
-                    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Море-</span><span>продукты</span></div>}>
-                        <Menu.Item key="setting:1">Option 1</Menu.Item>
-                        <Menu.Item key="setting:2">Option 2</Menu.Item>
-                        <Menu.Item key="setting:3">Option 3</Menu.Item>
-                        <Menu.Item key="setting:4">Option 4</Menu.Item>
-                    </SubMenu>
-                </Menu>
-                <span className={styles.appFooterSeparator}/>
-                <Menu className={"appFooterMenu"} mode="horizontal">
-                    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Вода и</span><span>напитки</span></div>}>
-                        <Menu.Item key="setting:1">Option 1</Menu.Item>
-                        <Menu.Item key="setting:2">Option 2</Menu.Item>
-                        <Menu.Item key="setting:3">Option 3</Menu.Item>
-                        <Menu.Item key="setting:4">Option 4</Menu.Item>
-                    </SubMenu>
-                </Menu>
-                <span className={styles.appFooterSeparator}/>
-                <Menu className={"appFooterMenu"} mode="horizontal">
-                    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Бакалея,</span><span>чай, кофе</span></div>}>
-                        <Menu.Item key="setting:1">Option 1</Menu.Item>
-                        <Menu.Item key="setting:2">Option 2</Menu.Item>
-                        <Menu.Item key="setting:3">Option 3</Menu.Item>
-                        <Menu.Item key="setting:4">Option 4</Menu.Item>
-                    </SubMenu>
-                </Menu>
-                <span className={styles.appFooterSeparator}/>
-                <Menu className={"appFooterMenu"} mode="horizontal">
-                    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Снеки и</span><span>сладкое</span></div>}>
-                        <Menu.Item key="setting:1">Option 1</Menu.Item>
-                        <Menu.Item key="setting:2">Option 2</Menu.Item>
-                        <Menu.Item key="setting:3">Option 3</Menu.Item>
-                        <Menu.Item key="setting:4">Option 4</Menu.Item>
-                    </SubMenu>
-                </Menu>
-                <span className={styles.appFooterSeparator}/>
+
+                {/*<Menu className={"appFooterMenu"} mode="horizontal">*/}
+                {/*    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Молоко</span><span>и яйца</span></div>}>*/}
+                {/*        <Menu.Item key="setting:1">Option 1</Menu.Item>*/}
+                {/*        <Menu.Item key="setting:2">Option 2</Menu.Item>*/}
+                {/*        <Menu.Item key="setting:3">Option 3</Menu.Item>*/}
+                {/*        <Menu.Item key="setting:4">Option 4</Menu.Item>*/}
+                {/*    </SubMenu>*/}
+                {/*</Menu>*/}
+                {/*<span className={styles.appFooterSeparator}/>*/}
+                {/*<Menu className={"appFooterMenu"} mode="horizontal">*/}
+                {/*    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Хлеб и</span><span>выпечка</span></div>}>*/}
+                {/*        <Menu.Item key="setting:1">Option 1</Menu.Item>*/}
+                {/*        <Menu.Item key="setting:2">Option 2</Menu.Item>*/}
+                {/*        <Menu.Item key="setting:3">Option 3</Menu.Item>*/}
+                {/*        <Menu.Item key="setting:4">Option 4</Menu.Item>*/}
+                {/*    </SubMenu>*/}
+                {/*</Menu>*/}
+                {/*<span className={styles.appFooterSeparator}/>*/}
+                {/*<Menu className={"appFooterMenu"} mode="horizontal">*/}
+                {/*    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Мясные</span><span>продукты</span></div>}>*/}
+                {/*        <Menu.Item key="setting:1">Option 1</Menu.Item>*/}
+                {/*        <Menu.Item key="setting:2">Option 2</Menu.Item>*/}
+                {/*        <Menu.Item key="setting:3">Option 3</Menu.Item>*/}
+                {/*        <Menu.Item key="setting:4">Option 4</Menu.Item>*/}
+                {/*    </SubMenu>*/}
+                {/*</Menu>*/}
+                {/*<span className={styles.appFooterSeparator}/>*/}
+                {/*<Menu className={"appFooterMenu"} mode="horizontal">*/}
+                {/*    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Море-</span><span>продукты</span></div>}>*/}
+                {/*        <Menu.Item key="setting:1">Option 1</Menu.Item>*/}
+                {/*        <Menu.Item key="setting:2">Option 2</Menu.Item>*/}
+                {/*        <Menu.Item key="setting:3">Option 3</Menu.Item>*/}
+                {/*        <Menu.Item key="setting:4">Option 4</Menu.Item>*/}
+                {/*    </SubMenu>*/}
+                {/*</Menu>*/}
+                {/*<span className={styles.appFooterSeparator}/>*/}
+                {/*<Menu className={"appFooterMenu"} mode="horizontal">*/}
+                {/*    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Вода и</span><span>напитки</span></div>}>*/}
+                {/*        <Menu.Item key="setting:1">Option 1</Menu.Item>*/}
+                {/*        <Menu.Item key="setting:2">Option 2</Menu.Item>*/}
+                {/*        <Menu.Item key="setting:3">Option 3</Menu.Item>*/}
+                {/*        <Menu.Item key="setting:4">Option 4</Menu.Item>*/}
+                {/*    </SubMenu>*/}
+                {/*</Menu>*/}
+                {/*<span className={styles.appFooterSeparator}/>*/}
+                {/*<Menu className={"appFooterMenu"} mode="horizontal">*/}
+                {/*    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Бакалея,</span><span>чай, кофе</span></div>}>*/}
+                {/*        <Menu.Item key="setting:1">Option 1</Menu.Item>*/}
+                {/*        <Menu.Item key="setting:2">Option 2</Menu.Item>*/}
+                {/*        <Menu.Item key="setting:3">Option 3</Menu.Item>*/}
+                {/*        <Menu.Item key="setting:4">Option 4</Menu.Item>*/}
+                {/*    </SubMenu>*/}
+                {/*</Menu>*/}
+                {/*<span className={styles.appFooterSeparator}/>*/}
+                {/*<Menu className={"appFooterMenu"} mode="horizontal">*/}
+                {/*    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Снеки и</span><span>сладкое</span></div>}>*/}
+                {/*        <Menu.Item key="setting:1">Option 1</Menu.Item>*/}
+                {/*        <Menu.Item key="setting:2">Option 2</Menu.Item>*/}
+                {/*        <Menu.Item key="setting:3">Option 3</Menu.Item>*/}
+                {/*        <Menu.Item key="setting:4">Option 4</Menu.Item>*/}
+                {/*    </SubMenu>*/}
+                {/*</Menu>*/}
+                {/*<span className={styles.appFooterSeparator}/>*/}
             </div>
             <span className={styles.appFooterGradientSeparator}/>
         </div>

@@ -17,6 +17,8 @@
     "autobind-decorator": "^2.4.0",
     "history": "^4.10.1",
     "node-sass": "^4.14.1",
+    "postgraphile": "^4.7.0",
+    "postgraphile-plugin-connection-filter": "^2.0.0",
     "react": "^16.13.1",
     "react-apollo": "^3.1.5",
     "react-dom": "^16.13.1",

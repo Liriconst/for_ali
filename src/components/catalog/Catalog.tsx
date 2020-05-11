@@ -2,7 +2,47 @@ import * as React from "react";
 import styles from "./Catalog.module.scss";
 import "./Catalog.scss";
 import autobind from "autobind-decorator";
-import { Form, Checkbox } from "antd";
+import {Button, Checkbox} from "antd";
+import {ApolloError, gql} from "apollo-boost";
+import {Link} from "react-router-dom";
+import {Query} from "react-apollo";
+
+// const GET_PRODUCTS = gql`
+//     query {
+//         allProducts(filter: {subId: {in: "1"}}) {
+//             nodes {
+//                 id
+//                 subId
+//                 manufId
+//                 prodFirstName
+//                 prodSecondName
+//             }
+//         }
+//     }
+// `;
+
+
+//ВОТ ТУТ НУЖЕН КАСТОМНЫЙ ФИЛЬТР. Вызов Query - 87 строка
+//manufId - это id компании, по которым нужен дополнительный фильтр, речь об этом сообщении в телеге:
+//-------------------------------------------------------
+//Фильтр должен работать в таких вариантах:
+// фильтр: только id
+// фильтр: id, id производителя [компания 1, компания 2]
+//-------------------------------------------------------
+
+const GET_PRODUCTS = gql`
+    query {
+        allProducts(filter: $ВОТ_ТУТ_НУЖЕН_КАСТОМНЫЙ_ФИЛЬТР) {
+            nodes {
+                id
+                subId
+                manufId
+                prodFirstName
+                prodSecondName
+            }
+        }
+    }
+`;
 
 interface ICatalogProps {
     form?: any
@@ -10,11 +50,13 @@ interface ICatalogProps {
 
 export default class Catalog extends React.Component<ICatalogProps, {
     filters: string[],
+    dateLocalStorage: string
 }>{
     public constructor(props: ICatalogProps) {
         super(props);
         this.state = {
-            filters: []
+            filters: [],
+            dateLocalStorage: ""
         }
     }
 
@@ -25,11 +67,14 @@ export default class Catalog extends React.Component<ICatalogProps, {
         } else {
             this.setState({filters: this.state.filters.filter(it => it !== name)});
         }
+
     }
 
     public render() {
-        // const { getFieldDecorator } = this.props.form;
-        console.log(this.state.filters);
+        if (this.state.dateLocalStorage !== localStorage.subCategoryId) {
+            this.setState({dateLocalStorage: localStorage.subCategoryId})
+        }
+        console.log(this.state.filters)
         const checkboxes = ["test1", "test2", "test3"];
         return (
             <div className={styles.pageCatalog}>
@@ -39,8 +84,22 @@ export default class Catalog extends React.Component<ICatalogProps, {
                     ))}
                 </div>
                 <div style={{background: "blue"}}>
-
+                    <Query query={GET_PRODUCTS}>
+                        {({loading, error, data}: {loading: boolean, error?: ApolloError, data: any}) => {
+                            if (loading) return <span>"Загрузка категорий...";</span>
+                            if (error) return <span>`Ошибка! ${error.message}`</span>;
+                            console.log(data);
+                            return (
+                                <div>
+                                    {data.allProducts.nodes.map((prodQuery: any) => (
+                                        <span>{prodQuery.prodFirstName}{prodQuery.prodSecondName}</span>
+                                    ))}
+                                </div>
+                            );
+                        }}
+                    </Query>
                 </div>
+                {console.log(localStorage.subCategoryId)}
             </div>
         );
     }
