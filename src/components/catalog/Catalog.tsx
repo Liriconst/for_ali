@@ -75,7 +75,7 @@ export default class Catalog extends React.Component<ICatalogProps, {
             this.setState({dateLocalStorage: localStorage.subCategoryId})
         }
         console.log(this.state.filters)
-        const checkboxes = ["test1", "test2", "test3"];
+        const checkboxes = ["компания 1", "компания 2", "компания 3"];
         return (
             <div className={styles.pageCatalog}>
                 <div style={{background: "red"}}>
