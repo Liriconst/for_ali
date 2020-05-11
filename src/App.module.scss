@@ -1,0 +1,190 @@
+@import "config";
+
+.appBar {
+  display: grid;
+  grid-template-columns: 100vw;
+  grid-template-rows: 31px 90px 69px;
+}
+
+/*region Header*/
+.appHeaderBlock {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 30px 1px;
+}
+
+.appBarHeader {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1.8fr 1.2fr;
+  grid-template-rows: 100%;
+  padding: 0 15%;
+}
+
+.appHeaderInfo {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  grid-template-rows: 100%;
+}
+
+.appHeaderContacts {
+  display: grid;
+  justify-items: end;
+  grid-template-columns: 1fr 135px;
+  grid-template-rows: 30px;
+}
+
+@mixin appHeaderText {
+  @include flexRowRelative;
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  color: #393939;
+  line-height: 1;
+}
+
+.appHeaderTextNormal {
+  @include appHeaderText;
+  font-weight: 400;
+}
+
+.appHeaderTextBold {
+  @include appHeaderText;
+  font-weight: 500;
+}
+
+.appHeaderLink {
+  @include appHeaderText;
+  border-bottom: 1px dashed #0046ff;
+
+  a {
+    &:hover {
+      color: #393939;
+    }
+  }
+
+  &:hover {
+    border-color: #393939 !important;
+  }
+}
+
+.appHeaderSeparator {
+  @include flexRowRelative;
+  height: 1px;
+  width: 100%;
+  background: #e9e9e9;
+}
+/*endregion Header*/
+
+/*region Middle*/
+.appMiddleBlock {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 89px 1px;
+}
+
+.appBarMiddle {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 100%;
+  padding: 0 15%;
+}
+
+.appMiddleLogo {
+  @include flexRowRelative;
+  justify-content: start;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+
+  img {
+    height:ptr(60px);
+  }
+}
+
+.appMiddleSearchProfile {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 150px;
+  grid-template-rows: 100%;
+}
+
+.appMiddleSearch {
+  @include flexRowRelative;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.appMiddleProfile {
+  display: grid;
+  justify-items: end;
+  grid-template-columns: 100%;
+  grid-template-rows: 1fr 1fr;
+}
+
+.appButtonContent {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 75px 25px;
+  grid-template-rows: 1fr;
+}
+
+.appButtonImg {
+  @include flexRowRelative;
+  height: 100%;
+  width: 100%;
+
+  img {
+    height: 25px;
+    width: 25px;
+  }
+}
+
+.appButtonText {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 30px;
+  color: #393939;
+  line-height: 1;
+}
+/*endregion Middle*/
+
+/*region Footer*/
+.appFooterBlock {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 60px 9px;
+}
+
+.appBarFooter {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  grid-template-columns: 1px 1fr 1px 1fr 1px 1fr 1px 1fr 1px 1fr 1px 1fr 1px 1fr 1px 1fr 1px;
+  grid-template-rows: 100%;
+  padding: 0 15%;
+}
+
+.appFooterSeparator {
+  @include flexRowRelative;
+  height: 100%;
+  width: 1px;
+  background: #e9e9e9;
+}
+
+.appFooterSelectContent {
+  @include flexColumnRelative;
+  justify-content: center;
+  align-items: center;
+}
+
+.appFooterGradientSeparator {
+  @include flexRowRelative;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(180deg, lightgrey, white);
+}
+/*endregion Footer*/

@@ -1,0 +1,9 @@
+@import "../../config";
+
+.pageCatalog {
+  display: grid;
+  height: calc(100vh - 190px);
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: 1fr;
+  padding: 0 15%;
+}

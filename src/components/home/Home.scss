@@ -1,0 +1,27 @@
+@import "../../config";
+
+.homeButtonSales {
+  &.ant-btn {
+    height: 50px !important;
+    width: 300px !important;
+
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 22px;
+  }
+}
+
+.homeProductButton {
+  &.ant-btn {
+    display: flex !important;
+    position: relative !important;
+    height: 100% !important;
+    width: calc((100vw - 30vw - 4px)/4) !important;
+
+    border: none transparent !important;
+    box-shadow: none !important;
+    --antd-wave-shadow-color: transparent !important;
+
+    padding: 0 !important;
+  }
+}
