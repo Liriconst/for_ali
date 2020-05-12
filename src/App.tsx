@@ -25,8 +25,12 @@ const GET_CATEGORIES = gql`
     query {
         allProdCategories {
             nodes {
-                id
-                catFullName
+                prodSubcategoriesByCatId {
+                    nodes {
+                        id
+                        subName
+                    }
+                }
                 catFirstName
                 catSecondName
             }
@@ -34,26 +38,28 @@ const GET_CATEGORIES = gql`
     }
 `;
 
-const GET_SUB = gql`
-    query {
-        allProdSubcategories {
-            nodes {
-                id
-                catId
-                subName
-            }
-        }
-    }
-`;
+// const GET_SUB = gql`
+//     query {
+//         allProdSubcategories {
+//             nodes {
+//                 id
+//                 catId
+//                 subName
+//             }
+//         }
+//     }
+// `;
 
 class AppHeaderInner extends React.Component<{location: any}, {
-  visible: boolean
+    visible: boolean,
+    catId: string
 }> {
     public constructor(props: {}) {
     // @ts-ignore
         super(props);
         this.state = {
-            visible: false
+            visible: false,
+            catId: ""
         };
     }
 
@@ -145,20 +151,11 @@ class AppHeaderInner extends React.Component<{location: any}, {
                                                  </div>}
                                             >
                                                 <Menu.ItemGroup className={styles.appFooterMenuGroup}>
-                                                    <Query query={GET_SUB}>
-                                                        {({loading, error, data}: {loading: boolean, error?: ApolloError, data: any}) => {
-                                                            if (loading) return <span>"Загрузка категорий...";</span>
-                                                            if (error) return <span>`Ошибка! ${error.message}`</span>;
-                                                            console.log(data);
-                                                            return (
-                                                                <div style={{display: "flex", flexDirection: "column", borderRadius: "25px"}}>
-                                                                    {data.allProdSubcategories.nodes.map((subQuery: any) => (
-                                                                        <Button onClick={() => this.saveDate(subQuery.id)}><Link to="/catalog">{subQuery.subName}</Link></Button>
-                                                                    ))}
-                                                                </div>
-                                                            );
-                                                        }}
-                                                    </Query>
+                                                    {categoryQuery.prodSubcategoriesByCatId.nodes.map((subQuery: any) => (
+                                                    <div style={{display: "flex", flexDirection: "column", borderRadius: "25px"}}>
+                                                        <Button className={"appButtonSubcategory"} onClick={() => this.saveDate(subQuery.id)}><Link to="/catalog">{subQuery.subName}</Link></Button>
+                                                    </div>
+                                                    ))}
                                                 </Menu.ItemGroup>
                                             </SubMenu>
                                         </Menu>
@@ -169,70 +166,6 @@ class AppHeaderInner extends React.Component<{location: any}, {
                     }}
                 </Query>
                 <span className={styles.appFooterSeparator}/>
-
-                {/*<Menu className={"appFooterMenu"} mode="horizontal">*/}
-                {/*    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Молоко</span><span>и яйца</span></div>}>*/}
-                {/*        <Menu.Item key="setting:1">Option 1</Menu.Item>*/}
-                {/*        <Menu.Item key="setting:2">Option 2</Menu.Item>*/}
-                {/*        <Menu.Item key="setting:3">Option 3</Menu.Item>*/}
-                {/*        <Menu.Item key="setting:4">Option 4</Menu.Item>*/}
-                {/*    </SubMenu>*/}
-                {/*</Menu>*/}
-                {/*<span className={styles.appFooterSeparator}/>*/}
-                {/*<Menu className={"appFooterMenu"} mode="horizontal">*/}
-                {/*    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Хлеб и</span><span>выпечка</span></div>}>*/}
-                {/*        <Menu.Item key="setting:1">Option 1</Menu.Item>*/}
-                {/*        <Menu.Item key="setting:2">Option 2</Menu.Item>*/}
-                {/*        <Menu.Item key="setting:3">Option 3</Menu.Item>*/}
-                {/*        <Menu.Item key="setting:4">Option 4</Menu.Item>*/}
-                {/*    </SubMenu>*/}
-                {/*</Menu>*/}
-                {/*<span className={styles.appFooterSeparator}/>*/}
-                {/*<Menu className={"appFooterMenu"} mode="horizontal">*/}
-                {/*    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Мясные</span><span>продукты</span></div>}>*/}
-                {/*        <Menu.Item key="setting:1">Option 1</Menu.Item>*/}
-                {/*        <Menu.Item key="setting:2">Option 2</Menu.Item>*/}
-                {/*        <Menu.Item key="setting:3">Option 3</Menu.Item>*/}
-                {/*        <Menu.Item key="setting:4">Option 4</Menu.Item>*/}
-                {/*    </SubMenu>*/}
-                {/*</Menu>*/}
-                {/*<span className={styles.appFooterSeparator}/>*/}
-                {/*<Menu className={"appFooterMenu"} mode="horizontal">*/}
-                {/*    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Море-</span><span>продукты</span></div>}>*/}
-                {/*        <Menu.Item key="setting:1">Option 1</Menu.Item>*/}
-                {/*        <Menu.Item key="setting:2">Option 2</Menu.Item>*/}
-                {/*        <Menu.Item key="setting:3">Option 3</Menu.Item>*/}
-                {/*        <Menu.Item key="setting:4">Option 4</Menu.Item>*/}
-                {/*    </SubMenu>*/}
-                {/*</Menu>*/}
-                {/*<span className={styles.appFooterSeparator}/>*/}
-                {/*<Menu className={"appFooterMenu"} mode="horizontal">*/}
-                {/*    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Вода и</span><span>напитки</span></div>}>*/}
-                {/*        <Menu.Item key="setting:1">Option 1</Menu.Item>*/}
-                {/*        <Menu.Item key="setting:2">Option 2</Menu.Item>*/}
-                {/*        <Menu.Item key="setting:3">Option 3</Menu.Item>*/}
-                {/*        <Menu.Item key="setting:4">Option 4</Menu.Item>*/}
-                {/*    </SubMenu>*/}
-                {/*</Menu>*/}
-                {/*<span className={styles.appFooterSeparator}/>*/}
-                {/*<Menu className={"appFooterMenu"} mode="horizontal">*/}
-                {/*    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Бакалея,</span><span>чай, кофе</span></div>}>*/}
-                {/*        <Menu.Item key="setting:1">Option 1</Menu.Item>*/}
-                {/*        <Menu.Item key="setting:2">Option 2</Menu.Item>*/}
-                {/*        <Menu.Item key="setting:3">Option 3</Menu.Item>*/}
-                {/*        <Menu.Item key="setting:4">Option 4</Menu.Item>*/}
-                {/*    </SubMenu>*/}
-                {/*</Menu>*/}
-                {/*<span className={styles.appFooterSeparator}/>*/}
-                {/*<Menu className={"appFooterMenu"} mode="horizontal">*/}
-                {/*    <SubMenu popupClassName={"appSubPopup"} className={"appSubMenu"} title={<div className="submenu-title-wrapper"><span>Снеки и</span><span>сладкое</span></div>}>*/}
-                {/*        <Menu.Item key="setting:1">Option 1</Menu.Item>*/}
-                {/*        <Menu.Item key="setting:2">Option 2</Menu.Item>*/}
-                {/*        <Menu.Item key="setting:3">Option 3</Menu.Item>*/}
-                {/*        <Menu.Item key="setting:4">Option 4</Menu.Item>*/}
-                {/*    </SubMenu>*/}
-                {/*</Menu>*/}
-                {/*<span className={styles.appFooterSeparator}/>*/}
             </div>
             <span className={styles.appFooterGradientSeparator}/>
         </div>
@@ -244,7 +177,6 @@ class AppHeaderInner extends React.Component<{location: any}, {
 const AppHeader = withRouter(AppHeaderInner);
 
 export const appHistory = createBrowserHistory();
-// export const {router, params, location, routes} = (window as any).props;
 
 const App: React.FC = () => {
   return (

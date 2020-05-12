@@ -28,11 +28,12 @@ import {Query} from "react-apollo";
 //Фильтр должен работать в таких вариантах:
 // фильтр: только id
 // фильтр: id, id производителя [компания 1, компания 2]
+//allProducts(filter: $ВОТ_ТУТ_НУЖЕН_КАСТОМНЫЙ_ФИЛЬТР) {
 //-------------------------------------------------------
 
 const GET_PRODUCTS = gql`
     query {
-        allProducts(filter: $ВОТ_ТУТ_НУЖЕН_КАСТОМНЫЙ_ФИЛЬТР) {
+        allProducts {
             nodes {
                 id
                 subId
