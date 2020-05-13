@@ -1,0 +1,55 @@
+@import "../../config";
+
+.userInput {
+  &.ant-input {
+    height: 40px !important;
+    width: 350px !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: 300 !important;
+    font-size: 18px !important;
+  }
+}
+
+.regCheck {
+  & .ant-legacy-form-explain {
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: 300 !important;
+    font-style: italic !important;
+    font-size: 15px !important;
+    line-height: 1.35;
+  }
+}
+
+.userButton {
+  &.ant-btn {
+    height: 45px !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: 300 !important;
+    font-size: 20px !important;
+    line-height: 1 !important;
+
+    border-radius: 0 !important;
+  }
+}
+
+.userLinkButton {
+  height: 20px !important;
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  color: #1890ff;
+  line-height: 1.25;
+
+  padding: 0 !important;
+  border: none transparent !important;
+  box-shadow: none !important;
+  --antd-wave-shadow-color: transparent !important;
+
+  &:hover {
+    color: black;
+    transition: 25ms ease;
+  }
+}

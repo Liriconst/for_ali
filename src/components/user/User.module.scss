@@ -1,0 +1,57 @@
+@import "../../config";
+
+.userPage {
+  @include flexRowRelative;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.regForm {
+  display: grid;
+  grid-template-columns: 350px 40px 350px;
+  grid-template-rows: 336px;
+}
+
+.userTitle {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.registrationSection {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 90px 90px 90px 1px 65px;
+}
+
+.userSeparator {
+  @include flexRowRelative;
+  height: 1px;
+  width: 100%;
+  background: #c0c0c0;
+}
+
+.registrationLinks {
+  display: grid;
+  align-items: center;
+  height: 45px;
+  width: 100%;
+  grid-template-columns: 1.05fr 0.95fr;
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  color: #656565;
+  line-height: 1.25;
+
+  margin-top: 20px;
+}
+
+.registrationLinkBlock {
+  @include flexColumnRelative;
+  padding-top: 2.5px;
+}
+

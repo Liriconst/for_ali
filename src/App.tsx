@@ -14,10 +14,10 @@ import { client } from "./index";
 import { Input, Button, Menu, Dropdown } from 'antd';
 import SubMenu from "antd/lib/menu/SubMenu";
 
-import Home from "./components/home/Home";
-import Authorization from "./components/authorization/Authorization";
+import WrappedAuthorization from "./components/user/Authorization";
+import WrappedRegistration from "./components/user/Registration";
 import Catalog from "./components/catalog/Catalog";
-import autobind from "autobind-decorator";
+import Home from "./components/home/Home";
 
 const { Search } = Input;
 
@@ -38,18 +38,6 @@ const GET_CATEGORIES = gql`
     }
 `;
 
-// const GET_SUB = gql`
-//     query {
-//         allProdSubcategories {
-//             nodes {
-//                 id
-//                 catId
-//                 subName
-//             }
-//         }
-//     }
-// `;
-
 class AppHeaderInner extends React.Component<{location: any}, {
     visible: boolean,
     catId: string
@@ -62,12 +50,6 @@ class AppHeaderInner extends React.Component<{location: any}, {
             catId: ""
         };
     }
-
-  @autobind
-  private saveDate(id: number) {
-      localStorage.setItem('subCategoryId', id.toString());
-      window.location.reload();
-  };
 
   public render(): React.ReactNode {
     const {location} = this.props;
@@ -153,7 +135,7 @@ class AppHeaderInner extends React.Component<{location: any}, {
                                                 <Menu.ItemGroup className={styles.appFooterMenuGroup}>
                                                     {categoryQuery.prodSubcategoriesByCatId.nodes.map((subQuery: any) => (
                                                     <div style={{display: "flex", flexDirection: "column", borderRadius: "25px"}}>
-                                                        <Button className={"appButtonSubcategory"} onClick={() => this.saveDate(subQuery.id)}><Link to="/catalog">{subQuery.subName}</Link></Button>
+                                                        <Button className={"appButtonSubcategory"}><Link to={`/catalog/${subQuery.id}`}>{subQuery.subName}</Link></Button>
                                                     </div>
                                                     ))}
                                                 </Menu.ItemGroup>
@@ -179,26 +161,32 @@ const AppHeader = withRouter(AppHeaderInner);
 export const appHistory = createBrowserHistory();
 
 const App: React.FC = () => {
-  return (
-    <Router history={appHistory}>
-      <ApolloProvider client={client}>
-        <div className={styles.appHeader}>
-          <AppHeader/>
-          <Switch>
-            <Route path="/authorization">
-              <Authorization/>
-            </Route>
-            <Route path="/catalog">
-              <Catalog/>
-            </Route>
-            <Route path="/">
-              <Home/>
-            </Route>
-          </Switch>
-        </div>
-      </ApolloProvider>
-    </Router>
-  );
+    return (
+        <Router history={appHistory}>
+            <ApolloProvider client={client}>
+            <div className={styles.appHeader}>
+                {((window.location.href == "http://localhost:3000/registration") ||
+                  (window.location.href == "http://localhost:3000/authorization")) ?
+                  (null) : (<AppHeader/>)
+                }
+                <Switch>
+                    <Route path="/authorization">
+                        <WrappedAuthorization/>
+                    </Route>
+                    <Route path="/registration">
+                        <WrappedRegistration/>
+                    </Route>
+                    <Route path="/catalog">
+                        <Catalog/>
+                    </Route>
+                    <Route path="/">
+                        <Home/>
+                    </Route>
+                </Switch>
+            </div>
+            </ApolloProvider>
+        </Router>
+    );
 };
 
 export default App;
