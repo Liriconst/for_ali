@@ -4,8 +4,8 @@ import autobind from 'autobind-decorator';
 import * as React from 'react';
 
 import { loadingErrorNotification } from './drawUtils';
-import { mutate, query, queryWrapper } from './gql';
-import { defaultIfNotBoolean } from './typeWrappers';
+import { mutate, query, queryWrapper } from './gql/wrapper';
+import { defaultIfNotBoolean } from './typeWrappers/booleanWrapper';
 
 const SPIN_DELAY = 300;
 
@@ -62,7 +62,6 @@ export class WaitData<T = any> extends React.Component<IWaitDataProps<T>, {
 
         return (
             <Spin
-                wrapperClassName={SPIN_WRAPPER}
                 delay={typeof this.props.delay === 'number' ? this.props.delay : SPIN_DELAY}
                 spinning={spinning}
                 indicator={hasErrors ? errorIcon : undefined}

@@ -6,6 +6,7 @@ import {Button, Checkbox} from "antd";
 import {ApolloError, gql} from "apollo-boost";
 import {Link} from "react-router-dom";
 import {Query} from "react-apollo";
+import {WaitData} from "../sui/WaitData";
 
 // const GET_PRODUCTS = gql`
 //     query {
@@ -31,19 +32,6 @@ import {Query} from "react-apollo";
 //allProducts(filter: $ВОТ_ТУТ_НУЖЕН_КАСТОМНЫЙ_ФИЛЬТР) {
 //-------------------------------------------------------
 
-const GET_PRODUCTS = gql`
-    query {
-        allProducts {
-            nodes {
-                id
-                subId
-                manufId
-                prodFirstName
-                prodSecondName
-            }
-        }
-    }
-`;
 
 interface ICatalogProps {
     form?: any
@@ -76,31 +64,54 @@ export default class Catalog extends React.Component<ICatalogProps, {
             this.setState({dateLocalStorage: localStorage.subCategoryId})
         }
         console.log(this.state.filters)
-        const checkboxes = ["компания 1", "компания 2", "компания 3"];
         return (
             <div className={styles.pageCatalog}>
                 <div style={{background: "red"}}>
-                    {checkboxes.map(it => (
-                        <Checkbox onChange={event => this.onChangeCheckbox(it, event)} key={it} checked={this.state.filters.includes(it)} className="checkbox"/>
-                    ))}
+                    <WaitData
+                        query={`{
+                            allProdManufactures {
+                                nodes {
+                                    id
+                                    manufName
+                                }
+                            }
+                        }`}
+                        extractKeysLevel={2}
+                        alwaysUpdate={true}
+                    >
+                        {(manufactures) => manufactures.map((it: any) => (
+                            <div>{it.manufName} <Checkbox onChange={event => this.onChangeCheckbox(it.id, event)} key={it.id} checked={this.state.filters.includes(it.id)} className="checkbox"/></div>
+                        ))}
+                    </WaitData>
                 </div>
                 <div style={{background: "blue"}}>
-                    <Query query={GET_PRODUCTS}>
-                        {({loading, error, data}: {loading: boolean, error?: ApolloError, data: any}) => {
-                            if (loading) return <span>"Загрузка категорий...";</span>
-                            if (error) return <span>`Ошибка! ${error.message}`</span>;
-                            console.log(data);
+                    <WaitData
+                        query={`{
+                            allProducts(filter: {manufId: {in: ${JSON.stringify(this.state.filters)}}}) {
+                                nodes {
+                                  id
+                                  subId
+                                  manufId
+                                  prodFirstName
+                                  prodSecondName
+                                }
+                            }
+                        }`}
+                        extractKeysLevel={2}
+                        alwaysUpdate={true}
+                    >
+                        {(products) => {
+                            console.log(products);
                             return (
                                 <div>
-                                    {data.allProducts.nodes.map((prodQuery: any) => (
-                                        <span>{prodQuery.prodFirstName}{prodQuery.prodSecondName}</span>
+                                    {products.map((product: any) => (
+                                        <span>{product.prodFirstName} {product.prodSecondName}</span>
                                     ))}
                                 </div>
                             );
                         }}
-                    </Query>
+                    </WaitData>
                 </div>
-                {console.log(localStorage.subCategoryId)}
             </div>
         );
     }
