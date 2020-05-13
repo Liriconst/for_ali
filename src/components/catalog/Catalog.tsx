@@ -87,7 +87,7 @@ export default class Catalog extends React.Component<ICatalogProps, {
                 <div style={{background: "blue"}}>
                     <WaitData
                         query={`{
-                            allProducts(filter: {manufId: {in: ${JSON.stringify(this.state.filters)}}}) {
+                            allProducts${this.state.filters.length ? `(filter: {manufId: {in: ${JSON.stringify(this.state.filters)}}})` : ''} {
                                 nodes {
                                   id
                                   subId
