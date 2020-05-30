@@ -16,8 +16,19 @@ import SubMenu from "antd/lib/menu/SubMenu";
 
 import WrappedAuthorization from "./components/user/Authorization";
 import WrappedRegistration from "./components/user/Registration";
+
 import Catalog from "./components/catalog/Catalog";
 import Home from "./components/home/Home";
+import Cart from "./components/cart/Cart";
+import autobind from 'autobind-decorator';
+import WrappedFullCart from "./components/cart/fullCart";
+import Manufacture from "./components/Manufacture/Manufacture";
+import Product from "./components/Product/Product";
+import Order from "./components/Order/Order";
+import ControlPanel from "./components/ControlPanel/ControlPanel";
+import Profile from "./components/user/Profile";
+import MyOrders from "./components/user/MyOrders";
+import DeliveryAndPay from "./components/catalog/DeliveryAndPay";
 
 const { Search } = Input;
 
@@ -51,8 +62,33 @@ class AppHeaderInner extends React.Component<{location: any}, {
         };
     }
 
+    @autobind
+    private showModal() {
+        this.setState({visible: true});
+    };
+
+    @autobind
+    private handleCancel() {
+        this.setState({visible: false});
+    };
+
+    @autobind
+    private pageReload() {
+        window.location.reload();
+    };
+
+    @autobind
+    private openProfile() {
+        if ((localStorage.getItem('email') !== "") && (localStorage.getItem('email') !== undefined)) {
+            appHistory.push("/profile");
+            window.location.reload();
+        } else {
+            appHistory.push("/authorization");
+            window.location.reload();
+        }
+    }
+
   public render(): React.ReactNode {
-    const {location} = this.props;
 
     return (
       <div className={styles.appBar}>
@@ -60,7 +96,7 @@ class AppHeaderInner extends React.Component<{location: any}, {
             <div className={styles.appBarHeader}>
                 <div className={styles.appHeaderInfo}>
                     <span className={styles.appHeaderTextBold}>
-                        Санкт-Петербург, ул. Зои Космодемьянской, д. 1
+                        Санкт-Петербург, пр. Обуховской Обороны 45
                     </span>
                     <span className={styles.appHeaderTextNormal}>
                         Пн-Пт: 9:00 - 21:00
@@ -68,10 +104,10 @@ class AppHeaderInner extends React.Component<{location: any}, {
                 </div>
                 <div className={styles.appHeaderContacts}>
                     <span className={styles.appHeaderTextNormal} style={{height: "17px", alignSelf: "center"}}>
-                        <div className={styles.appHeaderLink}><Link to="/authorization">Оплата и Доставка</Link></div>
+                        <Button type="link" className={styles.appHeaderLink} onClick={() => {appHistory.push("/delivery-and-pay"); window.location.reload()}}>Оплата и Доставка</Button>
                     </span>
                     <div className={styles.appHeaderTextBold} style={{alignItems: "center"}}>
-                        <span>+7 (921) 472-38-12</span>
+                        <span>+7 (812) 317-18-34</span>
                     </div>
                 </div>
             </div>
@@ -79,20 +115,17 @@ class AppHeaderInner extends React.Component<{location: any}, {
         </div>
         <div className={styles.appMiddleBlock}>
             <div className={styles.appBarMiddle}>
-                <div className={styles.appMiddleLogo}>
-                    <img src="/static/img/logo.png" alt=""/>
-                </div>
+                <Button type="link" className={styles.appMiddleLogo} onClick={() => {appHistory.push("/"); window.location.reload()}}>
+                    <img src="/static/img/logo-name.png" alt=""/>
+                    <img src="/static/img/logo-finish.png" alt=""/>
+                </Button>
                 <div className={styles.appMiddleSearchProfile}>
                     <div className={styles.appMiddleSearch}>
-                        <Search
-                            className={"appSearch"}
-                            placeholder="Поиск"
-                            onSearch={value => console.log(value)}
-                            style={{ width: 300 }}
-                        />
+                        <span className={styles.appMiddleText}>{localStorage.getItem('fullName')}</span>
+                        <div className={styles.appMiddleText} style={((localStorage.getItem('chcd') === "") || (localStorage.getItem('chcd') === undefined)) ? {color: "white"} : {color: "#c0c0c0"}}>{localStorage.getItem('email')}&nbsp;&nbsp;|&nbsp;&nbsp;{localStorage.getItem('company')}</div>
                     </div>
                     <div className={styles.appMiddleProfile}>
-                        <Button className={"appMeddleButton"}>
+                        <Button className={"appMeddleButton"} onClick={this.openProfile}>
                             <div className={styles.appButtonContent}>
                                 <span className={"appButtonText"}>ПРОФИЛЬ</span>
                                 <div className={styles.appButtonImg}>
@@ -100,14 +133,19 @@ class AppHeaderInner extends React.Component<{location: any}, {
                                 </div>
                             </div>
                         </Button>
-                        <Button className={"appMeddleButton"}>
+                        <Button className="appMeddleButton" disabled={(localStorage.getItem('chcd') === '0') ? false : true } onClick={this.showModal}>
                             <div className={styles.appButtonContent}>
                                 <span className={"appButtonText"}>КОРЗИНА</span>
                                 <div className={styles.appButtonImg}>
-                                    <img src="/static/svg/basket.svg" alt=""/>
+                                    {(localStorage.getItem('chcd') === '0') ?
+                                        <img src="/static/svg/basket.svg" alt=""/>
+                                     :
+                                        <img src="/static/svg/basket_disable.svg" alt=""/>
+                                    }
                                 </div>
                             </div>
                         </Button>
+                        <Cart isVisible={this.state.visible} onClose={this.handleCancel}/>
                     </div>
                 </div>
             </div>
@@ -135,7 +173,7 @@ class AppHeaderInner extends React.Component<{location: any}, {
                                                 <Menu.ItemGroup className={styles.appFooterMenuGroup}>
                                                     {categoryQuery.prodSubcategoriesByCatId.nodes.map((subQuery: any) => (
                                                     <div style={{display: "flex", flexDirection: "column", borderRadius: "25px"}}>
-                                                        <Button className={"appButtonSubcategory"}><Link to={`/catalog/${subQuery.id}`}>{subQuery.subName}</Link></Button>
+                                                        <Button className={"appButtonSubcategory"} onClick={() => this.pageReload()}><Link to={`/catalog/${subQuery.id}`}>{subQuery.subName}</Link></Button>
                                                     </div>
                                                     ))}
                                                 </Menu.ItemGroup>
@@ -165,8 +203,15 @@ const App: React.FC = () => {
         <Router history={appHistory}>
             <ApolloProvider client={client}>
             <div className={styles.appHeader}>
-                {((window.location.href == "http://localhost:3000/registration") ||
-                  (window.location.href == "http://localhost:3000/authorization")) ?
+                {((appHistory.location.pathname === "/registration") ||
+                  (appHistory.location.pathname === "/authorization") ||
+                  (appHistory.location.pathname === "/create-order") ||
+                  (appHistory.location.pathname === "/manufacture") ||
+                  (appHistory.location.pathname === "/order-list") ||
+                  (appHistory.location.pathname === "/control-panel") ||
+                  (appHistory.location.pathname === "/my-orders") ||
+                  (appHistory.location.pathname === "/profile") ||
+                  (appHistory.location.pathname === "/product")) ?
                   (null) : (<AppHeader/>)
                 }
                 <Switch>
@@ -178,6 +223,30 @@ const App: React.FC = () => {
                     </Route>
                     <Route path="/catalog">
                         <Catalog/>
+                    </Route>
+                    <Route path="/delivery-and-pay">
+                        <DeliveryAndPay/>
+                    </Route>
+                    <Route path="/create-order">
+                        <WrappedFullCart/>
+                    </Route>
+                    <Route path="/control-panel">
+                        <ControlPanel/>
+                    </Route>
+                    <Route path="/manufacture">
+                        <Manufacture/>
+                    </Route>
+                    <Route path="/order-list">
+                        <Order/>
+                    </Route>
+                    <Route path="/my-orders">
+                        <MyOrders/>
+                    </Route>
+                    <Route path="/product">
+                        <Product/>
+                    </Route>
+                    <Route path="/profile">
+                        <Profile/>
                     </Route>
                     <Route path="/">
                         <Home/>

@@ -1,0 +1,153 @@
+@import "../../config";
+
+.modalCart {
+  @include flexColumnRelative;
+  width: 822px !important;
+}
+
+.cartPosition {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 300px 1px 150px 1px 120px 1px 150px 1px 50px;
+  grid-template-rows: 40px;
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+  color: #393939;
+  line-height: 1;
+}
+
+.cartFullPosition {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 300px 1px 150px 1px 120px 1px 150px 1px 50px;
+  grid-template-rows: 35px;
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  color: #393939;
+  line-height: 1;
+}
+
+.cartPositionSeparator {
+  @include flexRowRelative;
+  height: 25px;
+  width: 1px;
+  margin: 7.5px 0;
+  background: #c0c0c0;
+}
+
+.totalCount {
+  @include flexRowRelative;
+  justify-content: flex-end;
+  align-items: flex-end;
+  height: 40px;
+  width: 774px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  color: #393939;
+  line-height: 1;
+}
+
+.pageCreateOrder {
+  display: grid;
+  justify-content: center;
+  justify-items: center;
+  height: 100vh;
+  width: 100vw;
+  grid-template-rows: calc(5vh + 40px) 1fr calc(5vh + 50px);
+}
+
+.createOrderHeader {
+  @include flexRowRelative;
+  justify-content: flex-start;
+  height: 40px;
+  width: 400px;
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 36px;
+  color: #1890ff;
+  line-height: 1;
+
+  border-bottom: 1px #1890ff solid;
+  margin-top: 5vh;
+}
+
+.createOrder {
+  display: grid;
+  height: 1fr;
+  width: 1280px;
+  grid-template-columns: 774px 46px 460px;
+  grid-template-rows: 1fr;
+  margin: 2vh 0;
+}
+
+.createOrderSeparator {
+  @include flexRowRelative;
+  height: 100%;
+  width: 1px;
+  margin-left: 15px;
+  margin-right: 30px;
+  background: #1890ff;
+}
+
+.deliveryTitle {
+  @include flexRowRelative;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 22px;
+  color: black;
+  line-height: 1;
+
+  margin-bottom: 10px;
+}
+
+.deliveryRadioGroup {
+  @include flexRowRelative;
+  width: 460px;
+}
+
+.deliveryRadio {
+  @include flexRowRelative;
+  align-items: center;
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+
+  white-space: normal;
+
+  line-height: 1;
+  margin-bottom: 10px;
+  margin-right: 20px !important;
+}
+
+.createOrderFooter {
+  @include flexRowRelative;
+  justify-content: flex-end;
+  align-items: center;
+  height: 50px;
+  width: 100vw;
+  margin-right: calc((100vw - 1280px));
+  margin-bottom: 5vh;
+}
+
+.createOrderFooterTitle {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 28px;
+  color: #393939;
+  line-height: 1;
+}
+
+.createOrderFooterSeparator {
+  @include flexRowRelative;
+  height: 50px;
+  width: 1px;
+  margin: 0 15px;
+  background: #1890ff;
+}

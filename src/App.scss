@@ -6,6 +6,10 @@
     border: none transparent !important;
     box-shadow: none !important;
     --antd-wave-shadow-color: transparent !important;
+
+    &:disabled {
+      background-color: white !important;
+    }
   }
 }
 

@@ -1,0 +1,117 @@
+@import "../../config";
+
+.inputManuf {
+  &.ant-input {
+    height: 40px !important;
+    width: 306px !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: 300 !important;
+    font-size: 18px !important;
+
+    border-radius: 0 !important;
+  }
+}
+
+.addManufButton {
+  &.ant-btn {
+    height: 40px !important;
+    width: 254px !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: 300 !important;
+    font-size: 18px !important;
+
+    border-radius: 0 !important;
+  }
+}
+
+.manufSearch {
+  width: 400px !important;
+  margin-bottom: 50px !important;
+
+  &.ant-input-search {
+    & .ant-input {
+      height: 40px !important;
+      width: 315px !important;
+
+      font-family: 'Roboto', sans-serif !important;
+      font-weight: 300 !important;
+      font-size: 18px !important;
+
+      border-radius: 10px 0 0 10px !important;
+    }
+
+    & .ant-btn {
+      height: 40px !important;
+      width: 85px !important;
+
+      font-family: 'Roboto', sans-serif !important;
+      font-weight: 300 !important;
+      font-size: 18px !important;
+
+      border-radius: 0 10px 10px 0 !important;
+    }
+  }
+}
+
+.manufButton {
+  &.ant-btn {
+    height: 60px !important;
+    width: 246px !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: 300 !important;
+    font-size: 18px !important;
+
+    border-radius: 0 !important;
+    margin: 0 10px 10px 0 !important;
+  }
+}
+
+.footerManufButton {
+  &.ant-btn {
+    height: 40px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 1;
+  }
+}
+
+.editManufInput {
+  &.ant-input {
+    height: 40px !important;
+    width: 472px !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: 300 !important;
+    font-size: 18px !important;
+
+    border-radius: 0 !important;
+  }
+}
+
+.manufFormCheck {
+  & .ant-legacy-form-explain {
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: 300 !important;
+    font-style: italic !important;
+    font-size: 15px !important;
+    color: #ff4d4f;
+    line-height: 1.35;
+  }
+}
+
+.toCpButtonSmall {
+  &.ant-btn {
+    height: 40px !important;
+    width: 140px !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: 300 !important;
+    font-size: 17px !important;
+
+    border-radius: 0 !important;
+  }
+}

@@ -1,0 +1,96 @@
+@import "../../config";
+
+.buttonDeleteOrder {
+  &.ant-btn {
+    height: 22px !important;
+    padding: 0 !important;
+  }
+}
+
+.buttonDeleteOrderIcon {
+  &.anticon {
+    font-size: 20px !important;
+    line-height: 1 !important;
+  }
+}
+
+.productCount {
+  height: 35px !important;
+  width: 60px !important;
+
+  &.ant-input-number {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    color: #9e9e9e;
+    line-height: 1;
+  }
+
+  & .ant-input-number-input-wrap {
+    padding-top: 3px !important;
+    height: 35px !important;
+  }
+}
+
+.productCountFull {
+  height: 30px !important;
+  width: 55px !important;
+
+  &.ant-input-number {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    color: #9e9e9e;
+    line-height: 1;
+  }
+
+  & .ant-input-number-input-wrap {
+    height: 30px !important;
+  }
+}
+
+.footerButton {
+  &.ant-btn {
+    height: 40px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 1;
+  }
+}
+
+.footerFullButton {
+  &.ant-btn {
+    height: 50px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 1;
+
+    border-radius: 0 !important;
+  }
+}
+
+.orderInput {
+  &.ant-input {
+    height: 40px !important;
+    width: 460px !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: 300 !important;
+    font-size: 18px !important;
+
+    border-radius: 0 !important;
+  }
+}
+
+.orderInputCheck {
+  & .ant-legacy-form-explain {
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: 300 !important;
+    font-style: italic !important;
+    font-size: 15px !important;
+    color: #ff4d4f;
+    line-height: 1.35;
+  }
+}

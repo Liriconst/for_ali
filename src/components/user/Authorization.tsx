@@ -1,175 +1,165 @@
 import * as React from "react";
 import {ApolloError, gql} from "apollo-boost";
-import {Button, Input, notification} from "antd";
-import Icon from "@ant-design/icons/lib/components/Icon";
-import { Form } from '@ant-design/compatible';
+import {Button, Input} from "antd";
+import {Form} from '@ant-design/compatible';
 import styles from "./User.module.scss";
 import "./User.scss";
-import {Link} from "react-router-dom";
-import {Query, Mutation} from "react-apollo";
+import {Query} from "react-apollo";
 import autobind from "autobind-decorator";
+import {appHistory} from "../../App";
 
 const GET_USER = gql`
     query {
         allUsrs {
             nodes {
+                id
+                firstName
+                secondName
+                patronymicName
                 email
+                password
+                company
+                role
             }
         }
     }
 `;
 
-interface IAuthorizationProps {
+interface IRegistrationProps {
     form?: any
 }
 
-class Authorization extends React.Component<IAuthorizationProps, {
-    arrEmail: string[]
+class Authorization extends React.Component<IRegistrationProps, {
+    arrUsr: any[],
+    res: any[],
+    test: string,
+    textErrorFirst: string,
+    textErrorSecond: string
 }>{
-    public constructor(props: IAuthorizationProps) {
+    public constructor(props: IRegistrationProps) {
         super(props);
         this.state = {
-            arrEmail: []
+            arrUsr: [],
+            res: [],
+            test: "",
+            textErrorFirst: "",
+            textErrorSecond: ""
         }
     }
 
-    openNotification = () => {
-        notification.open({
-            message: 'Успешная регистрация!',
-            description: 'Вы были успешно зарегистрированы и можете войти под своими учетными даными',
-            icon: <Icon type="check-circle" style={{ color: '#52c41a' }} />,
-            duration: 6,
-        });
-    };
-
-    handleSubmit = (createReview: any) => {
+    handleSubmit = () => {
         this.props.form.validateFields((err: any, values: any) => {
             if (!err) {
                 console.log('Received values of form: ', values);
-                createReview({ variables: { firstName: values.firstName, secondName: values.secondName, patronymicName: values.patronymicName, email: values.email, company: values.company, password: values.password}});
-                this.openNotification();
-                this.props.form.resetFields();
             }
+
+            const userDate = this.state.arrUsr.find(v => (v.email === values.email) && (v.password === values.password));
+            if (userDate !== undefined) {
+                this.setState({res: userDate.email});
+                this.setState({res: userDate.password});
+
+                localStorage.setItem('email', values.email);
+                localStorage.setItem('usrId', userDate.id);
+
+                if (userDate.role) {
+                    localStorage.setItem('chcd', '1');
+                } else {
+                    localStorage.setItem('chcd', '0');
+                }
+                localStorage.setItem('company', userDate.company);
+                localStorage.setItem('password', values.password);
+                localStorage.setItem('fullName', (userDate.firstName + " " + userDate.secondName + " " + userDate.patronymicName));
+
+                appHistory.push('/');
+                window.location.reload();
+            } else {
+                this.setState({textErrorFirst: "Ошибка! Пользователь не найден,"})
+                this.setState({textErrorSecond: "или учетные данные некорректны"})
+
+                localStorage.setItem('email', "");
+                localStorage.setItem('company', "");
+                localStorage.setItem('usrId', "");
+                localStorage.setItem('chcd', "");
+                localStorage.setItem('password', "");
+                localStorage.setItem('fullName', "");
+            }
+
         });
     };
 
     validatorEmail = (rule: any, str: string, callback: any) => {
         if (str === "") callback('Пожалуйста, заполните поле!');
-        else if (!/^([a-z0-9_.-]+\.)*[a-z0-9_.-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,20}$/.test(str)) callback('Разрешены только буквы русского алфавита. Пожалуйста, проверьте введёные данные.');
+        else if (!/^([a-z0-9_.-]+\.)*[a-z0-9_.-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,20}$/.test(str)) callback('Разрешена только латиница и символы @, _,.');
         callback()
     };
 
-    refreshLink = () => {
+    @autobind
+    private openLink() {
+        appHistory.push("/registration");
         window.location.reload()
-    };
+    }
 
     public render() {
         const { getFieldDecorator } = this.props.form;
 
-        return (
-            <div className={styles.userPage}>
+        if ((localStorage.getItem('email') === "") || (localStorage.getItem('email') === undefined)) {
+            return (
                 <Query query={GET_USER}>
-                    {({loading, error, data}: {loading: boolean, error?: ApolloError, data: any}) => {
-                        if (loading) return <span>"Загрузка категорий...";</span>
-                        if (error) return <span>`Ошибка! ${error.message}`</span>;
-                        console.log(data);
+                    {({loading, error, data}: { loading: boolean, error?: ApolloError, data: any }) => {
+                        if (loading) return <span>"загрузка"</span>;
+                        if (error) return <span>'Ошибочка ${error.message}'</span>;
+                        if (!this.state.arrUsr.length) {
+                            this.setState({arrUsr: data.allUsrs.nodes})
+                        }
+                        console.log(localStorage.getItem('chcd'))
                         return (
-                            <>
-                                {((localStorage.usr_email === "") || (localStorage.usr_email === undefined)) ? (
-                                    <Form className={styles.regForm}>
-                                        <div className={styles.registrationSection}>
-                                            <div>
-                                                <div style={{marginTop: "0px"}} className={styles.userTitle}>Введите вашу фамилию:</div>
-                                                <Form.Item className={"regCheck"}>
-                                                    {getFieldDecorator('secondName', {
-                                                        rules: [{
-                                                            required: true,
-                                                            message: 'Пожалуйста, заполните поле'
-                                                        }],
-                                                    })(<Input className={"userInput"} placeholder="Фамилия"/>)}
-                                                </Form.Item>
-                                            </div>
-                                            <div>
-                                                <div className={styles.userTitle}>Введите ваше имя:</div>
-                                                <Form.Item>
-                                                    {getFieldDecorator('firstName', {
-                                                        rules: [{
-                                                            required: true,
-                                                            message: 'Пожалуйста, заполните поле'
-                                                        }],
-                                                    })(<Input className={"userInput"} placeholder="Имя"/>)}
-                                                </Form.Item>
-                                            </div>
-                                            <div>
-                                                <div className={styles.userTitle}>Введите ваше отчество:</div>
-                                                <Form.Item>
-                                                    {getFieldDecorator('patronymicName', {
-                                                        rules: [{
-                                                            required: false
-                                                        }],
-                                                    })(<Input className={"userInput"} placeholder="Отчество (необязательно)"/>)}
-                                                </Form.Item>
-                                            </div>
-                                            <span className={styles.userSeparator}/>
-                                            <div className={styles.registrationLinks}>
-                                                <div className={styles.registrationLinkBlock}>
-                                                    <span>Уже зарегистрированы?</span>
-                                                    <Button className={"userLinkButton"} style={{width: "120px"}} onClick={() => {this.refreshLink()}}><Link to="/authorization">Авторизоваться</Link></Button>
-                                                </div>
-                                                <div className={styles.registrationLinkBlock} style={{alignItems: "flex-end"}}>
-                                                    <span>Вернуться</span>
-                                                    <span className={"userLinkButton"}><Link to="/">На главную</Link></span>
-                                                </div>
-                                            </div>
+                            <div className={styles.userPage}>
+                                <Form className={styles.authForm}>
+                                    <div className={styles.authorizationSection}>
+                                        <div>
+                                            <div className={styles.userTitle}>Введите ваш email:</div>
+                                            <Form.Item className={"regCheck"}>
+                                                {getFieldDecorator('email', {
+                                                    rules: [{
+                                                        required: true,
+                                                        validator: this.validatorEmail
+                                                    }],
+                                                })(<Input className={"userInput"} placeholder="example@gmail.com"/>)}
+                                            </Form.Item>
                                         </div>
-                                        <span className={styles.userSeparator} style={{marginTop: "270px", marginBottom: "79px"}}/>
-                                        <div className={styles.registrationSection}>
-                                            <div>
-                                                <div className={styles.userTitle}>Введите ваш email:</div>
-                                                <Form.Item>
-                                                    {getFieldDecorator('email', {
-                                                        rules: [{
-                                                            required: true,
-                                                            validator: this.validatorEmail
-                                                        }],
-                                                    })(<Input className={"userInput"} placeholder="example@gmail.com"/>)}
-                                                </Form.Item>
-                                            </div>
-                                            <div>
-                                                <div className={styles.userTitle}>Введите ваш пароль:</div>
-                                                <Form.Item>
-                                                    {getFieldDecorator('password', {
-                                                        rules: [{
-                                                            required: true,
-                                                            message: 'Пожалуйста, заполните поле'
-                                                        }],
-                                                    })(<Input className={"userInput"} placeholder="Пароль"/>)}
-                                                </Form.Item>
-                                            </div>
-                                            <div>
-                                                <div className={styles.userTitle}>Введите название вашей компании:</div>
-                                                <Form.Item>
-                                                    {getFieldDecorator('company', {
-                                                        rules: [{
-                                                            required: false
-                                                        }],
-                                                    })(<Input className={"userInput"} placeholder="Компания (необязательно)"/>)}
-                                                </Form.Item>
-                                            </div>
-                                            <span className={styles.userSeparator}/>
-                                            <Button className={"userButton"} style={{marginTop: "20px"}} key="submit" type="primary">Войти на сайт</Button>
+                                        <div>
+                                            <div className={styles.userTitle}>Введите ваш пароль:</div>
+                                            <Form.Item className={"regCheck"}>
+                                                {getFieldDecorator('password', {
+                                                    rules: [{
+                                                        required: true,
+                                                        message: 'Пожалуйста, заполните поле'
+                                                    }],
+                                                })(<Input className="userInput" type="password"
+                                                          placeholder="Пароль"/>)}
+                                            </Form.Item>
                                         </div>
-                                        {data.allUsrs.nodes.map((usrQuery: any) => (
-                                            <span/>
-                                        ))}
-                                    </Form>
-                                ) : (window.location.href = "http://localhost:3000")}
-                            </>
-                        );
+                                        <span className={styles.userSeparator}/>
+                                        <div className={styles.authorizationLinks} style={{marginTop: "5px"}}>
+                                            <span>Ещё не зарегистрированы?&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                            <Button className={"authLinkButton"} style={{marginTop: "3px"}} onClick={() => this.openLink()}>Зарегистрироваться</Button>
+                                        </div>
+                                        <Button className={"userButton"} style={{marginTop: "5px"}} key="submit" type="primary" onClick={() => {this.handleSubmit()}}>Войти</Button>
+                                        <div className={styles.textError}>
+                                            <span>{this.state.textErrorFirst}</span>
+                                            <span>{this.state.textErrorSecond}</span>
+                                        </div>
+                                    </div>
+                                </Form>
+                            </div>
+                        )
                     }}
                 </Query>
-            </div>
-        );
+            );
+        } else {
+            appHistory.push("/");
+            window.location.reload()
+        }
     }
 }
 

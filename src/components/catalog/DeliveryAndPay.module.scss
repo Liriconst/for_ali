@@ -1,0 +1,32 @@
+@import "../../config";
+
+.pageDelivery {
+  @include flexColumnRelative;
+  width: 560px;
+  margin-left: calc((100vw - 560px)/2);
+}
+
+.deliveryHeader {
+  @include flexRowRelative;
+  justify-content: center;
+  width: 560px;
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 1.5;
+}
+
+.deliveryTitle {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 1.35;
+}
+
+.deliveryText {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 1.2;
+}

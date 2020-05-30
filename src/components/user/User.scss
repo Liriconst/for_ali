@@ -17,6 +17,7 @@
     font-weight: 300 !important;
     font-style: italic !important;
     font-size: 15px !important;
+    color: #ff4d4f;
     line-height: 1.35;
   }
 }
@@ -31,6 +32,59 @@
     line-height: 1 !important;
 
     border-radius: 0 !important;
+  }
+}
+
+.profileButton {
+  &.ant-btn {
+    height: 60px !important;
+    width: 350px !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: 300 !important;
+    font-size: 28px !important;
+    line-height: 1 !important;
+
+    border-radius: 0 !important;
+  }
+}
+
+.profileLinkButton {
+  &.ant-btn {
+    width: 350px !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: 300 !important;
+    font-size: 18px !important;
+    color: #105a9e !important;
+    line-height: 1 !important;
+  }
+}
+
+.authLinkButton {
+  height: 21px !important;
+  width: 145px !important;
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 15px;
+  color: #1890ff;
+  line-height: 1.25;
+
+  border-bottom: 1px #1890ff dotted !important;
+
+  padding: 0 !important;
+  border-top: none transparent !important;
+  border-left: none transparent !important;
+  border-right: none transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  --antd-wave-shadow-color: transparent !important;
+
+  &:hover {
+    color: black;
+    border-bottom: 1px black dotted !important;
+    transition: 25ms ease;
   }
 }
 

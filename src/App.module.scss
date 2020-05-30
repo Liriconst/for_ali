@@ -3,7 +3,7 @@
 .appBar {
   display: grid;
   grid-template-columns: 100vw;
-  grid-template-rows: 31px 90px 69px;
+  grid-template-rows: 31px 90px 69px;;
 }
 
 /*region Header*/
@@ -54,17 +54,11 @@
 
 .appHeaderLink {
   @include appHeaderText;
-  border-bottom: 1px dashed #0046ff;
-
-  a {
-    &:hover {
-      color: #393939;
-    }
-  }
-
-  &:hover {
-    border-color: #393939 !important;
-  }
+  height: 18px;
+  color: #1890ff;
+  border-bottom: 1px #1890ff dotted;
+  padding: 0 !important;
+  margin-top: 0 !important;
 }
 
 .appHeaderSeparator {
@@ -100,6 +94,8 @@
   img {
     height:ptr(60px);
   }
+
+  padding: 0 !important;
 }
 
 .appMiddleSearchProfile {
@@ -110,11 +106,19 @@
 }
 
 .appMiddleSearch {
-  @include flexRowRelative;
-  justify-content: flex-end;
-  align-items: center;
+  @include flexColumnRelative;
+  justify-content: center;
+  align-items: flex-end;
   height: 100%;
   width: 100%;
+}
+
+.appMiddleText {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+  color: #c0c0c0;
+  line-height: 1.25;
 }
 
 .appMiddleProfile {

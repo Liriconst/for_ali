@@ -1,0 +1,68 @@
+@import "../../config";
+
+.orderSearch {
+  width: 486px !important;
+  margin-bottom: 30px !important;
+
+  &.ant-input-search {
+    & .ant-input {
+      height: 40px !important;
+      width: 401px !important;
+
+      font-family: 'Roboto', sans-serif !important;
+      font-weight: 300 !important;
+      font-size: 18px !important;
+
+      border-radius: 10px 0 0 10px !important;
+    }
+
+    & .ant-btn {
+      height: 40px !important;
+      width: 85px !important;
+
+      font-family: 'Roboto', sans-serif !important;
+      font-weight: 300 !important;
+      font-size: 18px !important;
+
+      border-radius: 0 10px 10px 0 !important;
+    }
+  }
+}
+
+.orderSmallInfoButton {
+  &.ant-btn {
+    height: 30px !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: 300 !important;
+    font-size: 16px !important;
+    line-height: 1 !important;
+
+    border: none transparent !important;
+    margin: 0 0 10px 0 !important;
+
+    &:hover {
+      font-weight: bold !important;
+      transition: 125ms;
+    }
+  }
+}
+
+.orderModal {
+  &.ant-modal {
+    width: 1019px !important;
+  }
+}
+
+.toCpButton {
+  &.ant-btn {
+    height: 50px !important;
+    width: 300px !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: 300 !important;
+    font-size: 20px !important;
+
+    border-radius: 0 !important;
+  }
+}

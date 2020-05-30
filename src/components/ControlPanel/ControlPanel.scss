@@ -1,0 +1,15 @@
+@import "../../config";
+
+.cpButton {
+  &.ant-btn {
+    height: 70px !important;
+    width: 350px !important;
+
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: 300 !important;
+    font-size: 22px !important;
+
+    border-radius: 0 !important;
+    margin-bottom: 10px !important;
+  }
+}

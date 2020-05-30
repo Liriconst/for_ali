@@ -1,0 +1,142 @@
+@import "../../config";
+
+.ordersPage {
+  display: grid;
+  grid-template-columns: 1280px;
+  grid-template-rows: 120px 1fr;
+
+  margin-left: calc((100vw - 1280px)/2);
+}
+
+.ordersMainTitle {
+  @include flexRowRelative;
+  justify-content: center;
+  align-items: center;
+  height: 120px;
+  width: 1280px;
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 42px;
+  color: #125fa7;
+  line-height: 1;
+
+  padding-top: 20px;
+}
+
+.searchBlock {
+  @include flexRowRelative;
+  justify-content: center;
+  width: 1280px;
+}
+
+.orderList {
+  display: grid;
+  width: 1280px;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.orderInnerModal {
+  display: grid;
+  width: 800px;
+  grid-template-columns: 610px 61px 300px;
+  grid-template-rows: 1fr;
+}
+
+.orderSeparator {
+  @include flexRowRelative;
+  height: 1fr;
+  width: 1px;
+  background: #1890ff;
+  margin: 0 30px;
+}
+
+.orderPosition {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 252px 4px 200px 4px 75px 4px 75px;
+  grid-template-rows: 30px;
+}
+
+.orderPositionNote {
+  @include flexRowRelative;
+  justify-content: center;
+  width: 100%;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  color: #767676;
+  line-height: 1;
+}
+
+.orderPrice {
+  @include flexRowRelative;
+  justify-content: flex-end;
+  align-items: center;
+  height: 40px;
+  width: 100%;
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+  color: black;
+  line-height: 1;
+
+  margin-left: 4px !important;
+}
+
+.orderFormModal {
+  @include flexColumnRelative;
+  width: 300px;
+}
+
+.orderModalTitle {
+  @include flexRowRelative;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  color: black;
+  line-height: 1.5;
+}
+
+.orderModalContact {
+  @include flexRowRelative;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+  color: #393939;
+  line-height: 1;
+}
+
+.orderModalStatus {
+  @include flexRowRelative;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.orderModalRadio {
+  @include flexRowRelative;
+  align-items: center;
+  align-content: center;
+  height: 25px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+  color: #393939;
+  line-height: 1;
+}
+
+.orderListTitle {
+  @include flexRowRelative;
+  justify-content: flex-start;
+  align-items: center;
+  height: 50px;
+  width: 267px;
+
+  padding-top: 3px;
+  border-right: 1px #105a9e solid;
+  margin-right: 15px;
+}

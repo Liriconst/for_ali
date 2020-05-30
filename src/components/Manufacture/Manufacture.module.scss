@@ -1,0 +1,66 @@
+@import "../../config";
+
+.pageManuf {
+  display: grid;
+  justify-content: center;
+  height: 100%;
+  width: 100vw;
+}
+
+.manufBlock {
+  display: grid;
+  width: 1280px;
+  grid-template-columns: 1280px;
+  grid-template-rows: 150px 1fr;
+}
+
+.manufAdd {
+  @include flexRowRelative;
+  justify-content: center;
+  align-items: flex-end;
+  height: 150px;
+  width: 1280px;
+  padding-bottom: 20px;
+}
+
+.manufAddForm {
+  @include flexRowRelative;
+}
+
+.manuf {
+  display: grid;
+  justify-items: center;
+  grid-template-columns: 1280px;
+  grid-template-rows: 90px 1fr;
+  width: 1280px;
+}
+
+.manufList {
+  display: grid;
+  width: 1280px;
+  grid-template-columns: repeat(5, 1fr);
+  margin-left: 5px;
+}
+
+.editManufTitle {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 24px;
+  color: #1574cd;
+  line-height: 1;
+
+  margin-bottom: 15px;
+}
+
+.manufSearchBlock {
+  @include flexRowRelative;
+  justify-content: flex-start;
+  height: 40px;
+  width: 415px;
+  border-right: 1px #1890ff solid;
+  margin-right: 15px;
+}
+
+.manufSearchButtons {
+  @include flexRowRelative;
+}
