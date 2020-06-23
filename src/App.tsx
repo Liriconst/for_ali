@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {BrowserRouter as Router, Switch, Route, Link, withRouter} from "react-router-dom";
+import {BrowserRouter as Router, HashRouter, Switch, Route, Link, withRouter} from "react-router-dom";
 
 import styles from './App.module.scss';
 import "./App.scss";

@@ -68,6 +68,7 @@ class OrderModal extends React.Component<IOrderModalProps, {
         this.props.form.validateFields((err: any, values: any) => {
             if (!err) {
                 console.log('Received values of form: ', values);
+                console.log("Статус", this.state.orderStatusTemp);
                 updateOrder({ variables: {id: this.props.order.id, orderStatus: this.state.orderStatusTemp }});
                 this.props.onClose();
                 this.openNotification();
@@ -77,13 +78,14 @@ class OrderModal extends React.Component<IOrderModalProps, {
     };
 
     changeRadio(value: any) {
-        if (value.target.checked === null || value.target.checked === undefined) {
+        if (value.target.value === null || value.target.value === undefined) {
             this.setState({orderStatusTemp: null});
         }
-        else if (value.target.checked === true) {
-            this.setState({orderStatusTemp: true});
-        } else {
+        else if (value.target.value === false) {
             this.setState({orderStatusTemp: false});
+        }
+        else if (value.target.value === true) {
+            this.setState({orderStatusTemp: true});
         }
     }
 
